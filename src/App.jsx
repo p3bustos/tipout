@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calculator, DollarSign, Users, Clock, History, Trash2 } from 'lucide-react';
 import './App.css';
+import { track } from '@vercel/analytics';
 
 function App() {
   const [totalTips, setTotalTips] = useState('');
@@ -28,6 +29,7 @@ function App() {
   }, [history]);
 
   const addEmployee = () => {
+    track('add_employee', { currentCount: employees.length });
     setEmployees([
       ...employees,
       { id: Date.now(), name: '', hours: '', percentage: '' }
@@ -52,6 +54,12 @@ function App() {
       alert('Please enter a valid total tips amount');
       return;
     }
+
+    track('calculation', {
+      method: calculationMethod,
+      employeeCount: employees.length,
+      totalTips: tips
+    });
 
     let calculatedResults = [];
 
@@ -136,6 +144,7 @@ function App() {
   };
 
   const clearHistory = () => {
+    track('clear_history');
     if (window.confirm('Are you sure you want to clear all history?')) {
       setHistory([]);
       localStorage.removeItem('tipoutHistory');
@@ -143,6 +152,7 @@ function App() {
   };
 
   const loadFromHistory = (entry) => {
+    track('load_history', { entryId: entry.id });
     setTotalTips(entry.totalTips.toString());
     setCalculationMethod(entry.method);
     setResults(entry.results);
