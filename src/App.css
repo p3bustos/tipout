@@ -429,3 +429,36 @@ body {
 .card {
   animation: fadeIn 0.3s ease-out;
 }
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  color: var(--text-secondary);
+}
+
+.lang-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lang-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.lang-btn.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}

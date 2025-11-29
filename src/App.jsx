@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Calculator, DollarSign, Users, Clock, History, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Calculator, DollarSign, Users, Clock, History, Trash2, Globe } from 'lucide-react';
 import './App.css';
 import { track } from '@vercel/analytics';
 
 function App() {
+  const { t, i18n} = useTranslation();
   const [totalTips, setTotalTips] = useState('');
   const [calculationMethod, setCalculationMethod] = useState('equal');
   const [employees, setEmployees] = useState([
@@ -48,10 +50,15 @@ function App() {
     ));
   };
 
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('language', lng);
+  };
+
   const calculateTipout = () => {
     const tips = parseFloat(totalTips);
     if (isNaN(tips) || tips <= 0) {
-      alert('Please enter a valid total tips amount');
+      alert(t('validTipsAmount'));
       return;
     }
 
@@ -79,7 +86,7 @@ function App() {
         );
         
         if (validEmployees.length === 0) {
-          alert('Please enter valid hours for at least one employee');
+          alert(t('validHours'));
           return;
         }
 
@@ -93,7 +100,7 @@ function App() {
           return {
             name: emp.name,
             amount: perHour * hours,
-            details: `${hours} hours × $${perHour.toFixed(2)}/hour`
+            details: t('hoursWorked', { hours: hours, rate: perHour.toFixed(2) })
           };
         });
         break;
@@ -104,7 +111,7 @@ function App() {
         );
         
         if (validPercentages.length === 0) {
-          alert('Please enter valid percentages for at least one employee');
+          alert(t('validPercentages'));
           return;
         }
 
@@ -113,7 +120,8 @@ function App() {
         );
 
         if (Math.abs(totalPercentage - 100) > 0.01) {
-          alert(`Warning: Percentages add up to ${totalPercentage.toFixed(1)}%, not 100%`);
+          alert(t('percentageWarning', { total: totalPercentage.toFixed(1) }));
+          return
         }
 
         calculatedResults = validPercentages.map(emp => {
@@ -121,7 +129,7 @@ function App() {
           return {
             name: emp.name,
             amount: (tips * percentage) / 100,
-            details: `${percentage}% of total`
+            details: t('percentageOfTotal', { percentage: percentage.toFixed(1) })
           };
         });
         break;
@@ -171,21 +179,36 @@ function App() {
         <header className="header">
           <div className="header-content">
             <Calculator className="header-icon" size={32} />
-            <h1>Tip-Out Calculator</h1>
+            <h1>{t('appTitle')}</h1>
           </div>
-          <p className="subtitle">Calculate fair tip distribution for your team</p>
+          <p className="subtitle">{t('appSubtitle')}</p>
+          <div className="language-selector">
+            <Globe size={18} />
+            <button 
+              className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}
+              onClick={() => changeLanguage('en')}
+            >
+              EN
+            </button>
+            <button
+              className={`lang-btn ${i18n.language === 'es' ? 'active' : ''}`}
+              onClick={() => changeLanguage('es')}
+            >
+              ES
+            </button>
+          </div>
         </header>
 
         <div className="main-content">
           <div className="card">
             <div className="card-header">
               <DollarSign size={20} />
-              <h2>Total Tips</h2>
+              <h2>{t('totalTips')}</h2>
             </div>
             <input
               type="number"
               className="input-large"
-              placeholder="Enter total tips amount"
+              placeholder={t('enterTotalTips')}
               value={totalTips}
               onChange={(e) => setTotalTips(e.target.value)}
               step="0.01"
@@ -196,7 +219,7 @@ function App() {
           <div className="card">
             <div className="card-header">
               <Calculator size={20} />
-              <h2>Calculation Method</h2>
+              <h2>{t('calculationMethod')}</h2>
             </div>
             <div className="method-buttons">
               <button
@@ -204,21 +227,21 @@ function App() {
                 onClick={() => setCalculationMethod('equal')}
               >
                 <Users size={18} />
-                Equal Split
+                {t('equalSplit')} 
               </button>
               <button
                 className={`method-btn ${calculationMethod === 'hours' ? 'active' : ''}`}
                 onClick={() => setCalculationMethod('hours')}
               >
                 <Clock size={18} />
-                By Hours
+                {t('byHours')}
               </button>
               <button
                 className={`method-btn ${calculationMethod === 'percentage' ? 'active' : ''}`}
                 onClick={() => setCalculationMethod('percentage')}
               >
                 <DollarSign size={18} />
-                By Percentage
+                {t('byPercentage')}
               </button>
             </div>
           </div>
@@ -226,7 +249,7 @@ function App() {
           <div className="card">
             <div className="card-header">
               <Users size={20} />
-              <h2>Employees</h2>
+              <h2>{t('employees')}</h2>
             </div>
             <div className="employees-list">
               {employees.map((emp, index) => (
@@ -234,7 +257,7 @@ function App() {
                   <input
                     type="text"
                     className="input"
-                    placeholder={`Employee ${index + 1} name`}
+                    placeholder={t('employeeName', { number: index + 1 })}
                     value={emp.name}
                     onChange={(e) => updateEmployee(emp.id, 'name', e.target.value)}
                   />
@@ -242,7 +265,7 @@ function App() {
                     <input
                       type="number"
                       className="input input-small"
-                      placeholder="Hours"
+                      placeholder={t('hours')}
                       value={emp.hours}
                       onChange={(e) => updateEmployee(emp.id, 'hours', e.target.value)}
                       step="0.5"
@@ -253,7 +276,7 @@ function App() {
                     <input
                       type="number"
                       className="input input-small"
-                      placeholder="%"
+                      placeholder={t('percentage')}
                       value={emp.percentage}
                       onChange={(e) => updateEmployee(emp.id, 'percentage', e.target.value)}
                       step="1"
@@ -265,7 +288,7 @@ function App() {
                     <button
                       className="btn-icon btn-danger"
                       onClick={() => removeEmployee(emp.id)}
-                      title="Remove employee"
+                      title={t('removeEmployee')}
                     >
                       <Trash2 size={18} />
                     </button>
@@ -274,23 +297,23 @@ function App() {
               ))}
             </div>
             <button className="btn-secondary" onClick={addEmployee}>
-              + Add Employee
+              {t('addEmployee')}
             </button>
           </div>
 
           <div className="action-buttons">
             <button className="btn-primary" onClick={calculateTipout}>
-              Calculate Tip-Out
+              {t('calculate')}
             </button>
             <button className="btn-secondary" onClick={resetForm}>
-              Reset
+              {t('reset')}
             </button>
             <button 
               className="btn-secondary"
               onClick={() => setShowHistory(!showHistory)}
             >
               <History size={18} />
-              {showHistory ? 'Hide' : 'Show'} History
+              {showHistory ? t('hideHistory') : t('showHistory')}
             </button>
           </div>
 
@@ -298,7 +321,7 @@ function App() {
             <div className="card results-card">
               <div className="card-header">
                 <DollarSign size={20} />
-                <h2>Tip-Out Results</h2>
+                <h2>{t('tipOutResults')}</h2>
               </div>
               <div className="results-list">
                 {results.map((result, index) => (
@@ -314,7 +337,7 @@ function App() {
                 ))}
               </div>
               <div className="results-total">
-                <span>Total Distributed:</span>
+                <span>{t('totalDistributed')}:</span>
                 <span className="total-amount">
                   ${results.reduce((sum, r) => sum + r.amount, 0).toFixed(2)}
                 </span>
@@ -326,7 +349,7 @@ function App() {
             <div className="card">
               <div className="card-header">
                 <History size={20} />
-                <h2>Calculation History</h2>
+                <h2>{t('calculationHistory')}</h2>
                 <button className="btn-icon btn-danger" onClick={clearHistory}>
                   <Trash2 size={18} />
                 </button>
@@ -353,7 +376,7 @@ function App() {
           )}
         </div>
         <footer className="footer">
-          <p>Built with ❤️ for efficient tip distribution by <a href="http://github.com/p3bustos" target="_blank" rel="noopener noreferrer">p3bustos</a></p>
+          <p>{t('footerText')} <a href="http://github.com/p3bustos" target="_blank" rel="noopener noreferrer">p3bustos</a></p>
         </footer>
       </div>
     </div>
