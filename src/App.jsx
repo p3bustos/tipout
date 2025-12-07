@@ -198,7 +198,6 @@ function App() {
             </button>
           </div>
         </header>
-
         <div className="main-content">
           <div className="card">
             <div className="card-header">
@@ -375,8 +374,82 @@ function App() {
             </div>
           )}
         </div>
+
+        <section className="faq-section" id="faq">
+          <h2>Frequently Asked Questions</h2>
+          <div className="faq-list">
+            <div className="faq-item">
+              <h3>How do I calculate tip out for servers?</h3>
+              <p>Enter the total tips collected, select your calculation method (equal split, by hours, or by percentage), add your team members, and click Calculate. The calculator will show each person's fair share.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Is this tip calculator free to use?</h3>
+              <p>Yes! This tip out calculator is completely free with no registration required. Use it unlimited times, and your calculation history is saved locally on your device.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Does the tip calculator work offline?</h3>
+              <p>Yes! After your first visit, the calculator works offline. Your history is saved locally on your device, so you can access it even without internet connection.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Which tip calculation method should I use?</h3>
+              <p>Use Equal Split for teams with similar roles and hours. Use By Hours for mixed part-time and full-time staff. Use By Percentage when different roles receive different tip percentages (e.g., servers vs. bussers).</p>
+            </div>
+            <div className="faq-item">
+              <h3>Can I use this for bar tip outs?</h3>
+              <p>Absolutely! This calculator works for restaurants, bars, cafes, and any service industry where tips need to be distributed among staff members.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Is my tip calculation data private?</h3>
+              <p>Yes! All calculations are done in your browser. Nothing is sent to a server. Your history is stored only on your device.</p>
+            </div>
+          </div>
+        </section>
         <footer className="footer">
           <p>{t('footerText')} <a href="http://github.com/p3bustos" target="_blank" rel="noopener noreferrer">p3bustos</a></p>
+            <div className="footer-seo">
+          <h3>About Tip Out Calculator</h3>
+          <p>
+            Free online tip calculator designed for restaurant workers, servers, bartenders,
+            and service industry professionals. Calculate fair tip distribution using three methods:
+            equal split among all staff, proportional distribution based on hours worked, or
+            custom percentage allocation. No login required, works offline, and saves your
+            calculation history locally for quick reference during busy shifts.
+          </p>
+          <p>
+            <strong>Keywords:</strong> tip calculator, tipout calculator, tip distribution,
+            restaurant tips, server tips, tip pooling, gratuity calculator, tip sharing calculator,
+            fair tip split, tip out sheet, tip distribution calculator
+          </p>
+        </div>
+
+          <div className="disclaimer">
+            <h4>⚠️ Legal Disclaimer</h4>
+            <p>
+              This tip calculator is provided "as is" for informational and convenience purposes only. 
+              While we strive for accuracy, we make no warranties or guarantees regarding the calculations, 
+              results, or suitability for any particular purpose.
+            </p>
+            <p>
+              <strong>Use at Your Own Risk:</strong> By using this calculator, you acknowledge that you are 
+              solely responsible for verifying all calculations and results. The creator and operators of 
+              this tool assume no liability for any errors, omissions, losses, damages, or disputes arising 
+              from the use of this calculator.
+            </p>
+            <p>
+              This tool does not constitute financial, legal, or professional advice. Always verify tip 
+              distribution calculations with your employer's policies and applicable labor laws in your 
+              jurisdiction. For official tip distribution matters, consult with your manager, HR department, 
+              or a qualified professional.
+            </p>
+            <p className="disclaimer-emphasis">
+              <strong>No Responsibility:</strong> The creator accepts no responsibility for any consequences, 
+              financial or otherwise, resulting from the use of this calculator. All calculations should be 
+              independently verified before implementation.
+            </p>
+          </div>
+          <p className="footer-copyright">
+            © {new Date().getFullYear()} Tip Out Calculator. All rights reserved.
+          </p>
         </footer>
       </div>
     </div>
